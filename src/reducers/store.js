@@ -4,6 +4,7 @@ import { combineReducers, createStore } from "redux";
 import board from "./board_reducer";
 import listsById from "./list_reducer";
 import cardsById from "./card_reducer";
+import seed from "../seed";
 
 const reducers = combineReducers({
   board,
@@ -35,8 +36,12 @@ const loadState = () => {
 const persistedState = loadState();
 const store = createStore(reducers, persistedState);
 
-store.subscribe(() => {
-    saveState(store.getState());
-  }, 1000);
+store.subscribe(saveState(store.getState()));
+
+console.log(store.getState());
+if (!store.getState().board.lists.length) {
+  console.log("SEED");
+  seed(store);
+}
 
 export default store;
