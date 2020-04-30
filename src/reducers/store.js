@@ -36,7 +36,9 @@ const loadState = () => {
 const persistedState = loadState();
 const store = createStore(reducers, persistedState);
 
-store.subscribe(saveState(store.getState()));
+store.subscribe(() => {
+  saveState(store.getState())
+});
 
 console.log(store.getState());
 if (!store.getState().board.lists.length) {
