@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/App.css';
 
 // component imports
-// import Board from "./Board";
+import Board from "./Board";
 
 function App() {
   return (
@@ -10,6 +10,7 @@ function App() {
       <div className="Header">
         Zello
       </div>
+      <Board />
     </div>
   );
 }
