@@ -6,9 +6,12 @@ import shortid from "shortid";
 import "../styles/List.css";
 import Card from "./Card";
 import CardEditor from "./CardEditor";
+import ListEditor from "./ListEditor";
 
 class List extends Component {
   state = {
+    editingTitle: false,
+    title: this.props.list.title,
     addingCard: false
   };
 
@@ -28,16 +31,52 @@ class List extends Component {
     });
   };
 
+  toggleEditingTitle = () =>
+    this.setState({ editingTitle: !this.state.editingTitle });
+
+  handleChangeTitle = e => this.setState({ title: e.target.value });
+
+  editListTitle = async () => {
+    const { listId, dispatch } = this.props;
+    const { title } = this.state;
+
+    this.toggleEditingTitle();
+
+    dispatch({
+      type: "CHANGE_LIST_TITLE",
+      payload: { listId, listTitle: title }
+    });
+  };
+
+  deleteList = async () => {
+    const { listId, list, dispatch } = this.props;
+
+    dispatch({
+      type: "DELETE_LIST",
+      payload: { listId, cards: list.cards }
+    });
+  };
+
   render() {
     const { list } = this.props;
-    const { addingCard } = this.state;
+    const { editingTitle, addingCard, title } = this.state;
 
     return (
       <div className="List">
-        <div className="List-Title" onClick={this.toggleEditingTitle}>
-          {list.title}
-        </div>
-
+        {editingTitle ? (
+          <ListEditor
+            list={list}
+            title={title}
+            handleChangeTitle={this.handleChangeTitle}
+            saveList={this.editListTitle}
+            onClickOutside={this.editListTitle}
+            deleteList={this.deleteList}
+          />
+        ) : (
+          <div className="List-Title" onClick={this.toggleEditingTitle}>
+            {list.title}
+          </div>
+        )}
         {list.cards &&
           list.cards.map((cardId, index) => (
             <Card
