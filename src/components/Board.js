@@ -18,22 +18,20 @@ class Board extends Component {
     const { addingList } = this.state;
 
     return (
-      <div>
         <div className="Board">
           {board.lists.map((listId, index) => {
             return <List listId={listId} key={listId} index={index} />;
           })}
+          <div className="Add-List">
+            {addingList ? (
+              <AddList toggleAddingList={this.toggleAddingList} />
+            ) : (
+              <div onClick={this.toggleAddingList} className="Add-List-Button">
+                <ion-icon name="add" /> Add a list
+              </div>
+            )}
+          </div>
         </div>
-        <div className="Add-List">
-          {addingList ? (
-            <AddList toggleAddingList={this.toggleAddingList} />
-          ) : (
-            <div onClick={this.toggleAddingList} className="Add-List-Button">
-              <ion-icon name="add" /> Add a list
-            </div>
-          )}
-        </div>
-      </div>
     );
   }
 }
